@@ -1,0 +1,14 @@
+bin/
+obj/
+*.user
+*.suo
+*.vspscc
+*.vssscc
+.vs/
+.vscode/
+*.db
+*.sqlite
+*.sqlite3
+*.pdb
+*.dll
+*.exe
