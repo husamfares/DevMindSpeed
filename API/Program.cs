@@ -1,4 +1,6 @@
 using API.Data;
+using API.Interfaces;
+using API.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,6 +17,7 @@ builder.Services.AddDbContext<DataContext>(
 builder.Services.AddOpenApi();
 
 builder.Services.AddCors();
+builder.Services.AddScoped<IGameEngineService, GameEngineService>();
 
 var app = builder.Build();
 
@@ -30,7 +33,7 @@ app.UseAuthorization();
 
 app.UseCors(x => x.AllowAnyHeader()
 .AllowAnyMethod()
-.WithOrigins("http://localhost:4200/"));
+.WithOrigins("http://localhost:4200"));
 
 app.MapControllers();
 

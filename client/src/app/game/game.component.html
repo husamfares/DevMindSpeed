@@ -1,0 +1,86 @@
+<div class="container">
+  <h2>Dev Mind Speed Game</h2>
+
+  <form *ngIf="!gameStarted" (ngSubmit)="startGame()" #gameForm="ngForm">
+    <!-- Player Name -->
+    <div>
+      <label for="name">Player Name:</label>
+      <input
+        type="text"
+        id="name"
+        name="name"
+        [(ngModel)]="playerName"
+        required
+        #name="ngModel"
+      />
+      <div *ngIf="name.invalid && name.touched" style="color: red;">
+        Player name is required.
+      </div>
+    </div>
+
+    <!-- Difficulty Levels -->
+    <div>
+      <label>Difficulty Level:</label><br />
+
+      <label>
+        <input
+          type="radio"
+          name="difficulty"
+          [(ngModel)]="difficultyLevel"
+          [value]="1"
+          required
+          #difficulty="ngModel"
+        />
+        Level 1 (Easy)
+      </label><br />
+
+      <label>
+        <input
+          type="radio"
+          name="difficulty"
+          [(ngModel)]="difficultyLevel"
+          [value]="2"
+        />
+        Level 2 (Medium)
+      </label><br />
+
+      <label>
+        <input
+          type="radio"
+          name="difficulty"
+          [(ngModel)]="difficultyLevel"
+          [value]="3"
+        />
+        Level 3 (Hard)
+      </label><br />
+
+      <label>
+        <input
+          type="radio"
+          name="difficulty"
+          [(ngModel)]="difficultyLevel"
+          [value]="4"
+        />
+        Level 4 (Insane)
+      </label>
+      <div *ngIf="difficulty.invalid && difficulty.touched" style="color: red;">
+        Please select a difficulty level.
+      </div>
+    </div>
+
+    <!-- Submit Button -->
+    <button type="submit" [disabled]="gameForm.invalid">Start Game</button>
+  </form>
+
+  <!-- Game content shown after start -->
+  <div *ngIf="gameStarted">
+    <h3>Welcome, {{ playerName }}!</h3>
+    <p>Time the game started: {{ timeStarted }}</p>
+    <p>Difficulty Level: {{ difficultyLevel }}</p>
+    <p>{{ message }}</p>
+
+    <p>The Question is: "{{ question }}"</p>
+
+    <!-- Here you can show questions or other game UI -->
+  </div>
+</div>
