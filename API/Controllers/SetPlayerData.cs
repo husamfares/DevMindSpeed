@@ -24,7 +24,6 @@ public class SetPlayerDataController : ControllerBase
     {
         var game = new GameSession
         {
-            //GameId = gameSessionDTO.GameId,
             PlayerName = gameSessionDTO.PlayerName,
             DifficulteLevel = gameSessionDTO.DifficultyLevel,
             StartTime = DateTime.UtcNow,

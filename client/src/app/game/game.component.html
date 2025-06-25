@@ -2,7 +2,6 @@
   <h2>Dev Mind Speed Game</h2>
 
   <form *ngIf="!gameStarted" (ngSubmit)="startGame()" #gameForm="ngForm">
-    <!-- Player Name -->
     <div>
       <label for="name">Player Name:</label>
       <input
@@ -18,7 +17,6 @@
       </div>
     </div>
 
-    <!-- Difficulty Levels -->
     <div>
       <label>Difficulty Level:</label><br />
 
@@ -68,11 +66,9 @@
       </div>
     </div>
 
-    <!-- Submit Button -->
     <button type="submit" [disabled]="gameForm.invalid">Start Game</button>
   </form>
 
-  <!-- Game content shown after start -->
   <div *ngIf="gameStarted">
     <h3>Welcome, {{ playerName }}!</h3>
     <p>Time the game started: {{ timeStarted }}</p>
@@ -81,6 +77,5 @@
 
     <p>The Question is: "{{ question }}"</p>
 
-    <!-- Here you can show questions or other game UI -->
   </div>
 </div>
