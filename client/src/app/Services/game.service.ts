@@ -3,6 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { __param } from 'tslib';
 import { StartGameInfo } from '../Models/StartGameInfo';
 import { AnswerResponse } from '../Models/AnswerResponse';
+import { GameSummaryDto } from '../Models/Summary';
 
 @Injectable({
   providedIn: 'root'
@@ -26,7 +27,7 @@ export class GameService {
 }
 
   EndGame(gameId: number) {
-  return this.http.get<any>(`${this.baseUrl}/game/${gameId}/end`);
+  return this.http.get<GameSummaryDto>(`${this.baseUrl}/game/${gameId}/end`);
 }
 
 

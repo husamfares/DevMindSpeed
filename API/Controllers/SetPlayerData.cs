@@ -10,6 +10,8 @@ namespace API.Controllers;
 
 [ApiController]
 [Route("[controller]")]
+[Route("game")]
+
 public class SetPlayerDataController : ControllerBase
 {
     private readonly IGameEngineService _gameEngineService;
@@ -17,7 +19,7 @@ public class SetPlayerDataController : ControllerBase
     private readonly IAnswerValidationService _answerValdationService;
     private readonly DataContext _context;
 
-    public SetPlayerDataController(DataContext context, IGameEngineService gameEngineService, IAnswerValidationService  answerValdationService)
+    public SetPlayerDataController(DataContext context, IGameEngineService gameEngineService, IAnswerValidationService answerValdationService)
     {
         _context = context;
         _gameEngineService = gameEngineService;
@@ -63,11 +65,11 @@ public class SetPlayerDataController : ControllerBase
 
 
     [HttpPost("/submit/{gameId}")]
-public async Task<IActionResult> SubmitAnswer(int gameId, [FromBody] AnswerUserDTO answerDto)
-{
+    public async Task<IActionResult> SubmitAnswer(int gameId, [FromBody] AnswerUserDTO answerDto)
+    {
         if (!ModelState.IsValid)
-        return BadRequest(ModelState);
-    try
+            return BadRequest(ModelState);
+        try
         {
             var questionRecord = await _context.AnswersInfo
             .Where(a => a.GameId == gameId && a.Answer == 0) // unanswered
@@ -89,6 +91,52 @@ public async Task<IActionResult> SubmitAnswer(int gameId, [FromBody] AnswerUserD
         {
             return BadRequest(new { error = ex.Message });
         }
+    }
+
+
+[HttpGet("{gameId}/end")]
+public async Task<ActionResult<GameSummaryDto>> EndGameAsync(int gameId)
+{
+    var game = await _context.Games.FindAsync(gameId);
+    if (game == null) return NotFound("Game not found");
+
+    var allAnswers = await _context.AnswersInfo
+        .Where(a => a.GameId == gameId && a.Answer != 0)
+        .OrderBy(a => a.SubmittedAt)
+        .ToListAsync();
+
+    if (!allAnswers.Any()) return BadRequest("No answers found for this game.");
+
+    var correctAnswers = allAnswers.Where(a => a.IsCorrect).ToList();
+
+    float score = (float)correctAnswers.Count / allAnswers.Count;
+    double totalTimeSpent = allAnswers.Sum(a => a.TimeTaken.TotalSeconds);
+
+    var bestAnswer = correctAnswers
+        .OrderBy(a => a.TimeTaken.TotalSeconds)
+        .FirstOrDefault();
+
+    var result = new GameSummaryDto
+    {
+        Name = game.PlayerName ?? string.Empty,
+        Difficulty = game.DifficulteLevel,
+        CurrentScore = score,
+        TotalTimeSpent = totalTimeSpent,
+        BestScore = bestAnswer == null ? null : new BestScoreDto
+        {
+            Question = bestAnswer.Question,
+            Answer = bestAnswer.Answer,
+            TimeTaken = bestAnswer.TimeTaken.TotalSeconds
+        },
+        History = allAnswers.Select(a => new HistoryDto
+        {
+            Question = a.Question,
+            Answer = a.Answer,
+            TimeTaken = a.TimeTaken.TotalSeconds
+        }).ToList()
+    };
+
+    return Ok(result);
 }
 
 

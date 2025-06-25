@@ -90,13 +90,16 @@
     <h3>Game Summary</h3>
     <p><strong>Player:</strong> {{ gameSummary.name }}</p>
     <p><strong>Difficulty Level:</strong> {{ gameSummary.difficulty }}</p>
-    <p><strong>Current Score:</strong> {{ gameSummary.current_score | percent:'1.0-2' }}</p>
-    <p><strong>Total Time Spent:</strong> {{ gameSummary.total_time_spent | number:'1.2-2' }} seconds</p>
+    <p><strong>Current Score:</strong> {{ gameSummary.currentScore | percent:'1.0-2' }}</p>
+    <p><strong>Total Time Spent:</strong> {{ gameSummary.totalTimeSpent | number:'1.2-2' }} seconds</p>
 
-    <h4>Best Score Question</h4>
-    <p>Question: {{ gameSummary.best_score.question }}</p>
-    <p>Answer: {{ gameSummary.best_score.answer }}</p>
-    <p>Time Taken: {{ gameSummary.best_score.time_taken | number:'1.2-2' }} seconds</p>
+    <h4 *ngIf="gameSummary?.bestScore">Best Score Question</h4>
+<div *ngIf="gameSummary?.bestScore">
+  <p>Question: {{ gameSummary.bestScore.question }}</p>
+  <p>Answer: {{ gameSummary.bestScore.answer }}</p>
+  <p>Time Taken: {{ gameSummary.bestScore.timeTaken | number:'1.2-2' }} seconds</p>
+</div>
+
 
     <h4>History</h4>
     <table style="width:100%; border-collapse: collapse; margin-top: 1rem;">
@@ -111,7 +114,7 @@
         <tr *ngFor="let entry of gameSummary.history">
           <td style="padding: 0.5rem; border: 1px solid #cbd5e1;">{{ entry.question }}</td>
           <td style="padding: 0.5rem; border: 1px solid #cbd5e1;">{{ entry.answer }}</td>
-          <td style="padding: 0.5rem; border: 1px solid #cbd5e1;">{{ entry.time_taken | number:'1.2-2' }}</td>
+          <td style="padding: 0.5rem; border: 1px solid #cbd5e1;">{{ entry.timeTaken | number:'1.2-2' }}</td>
         </tr>
       </tbody>
     </table>
