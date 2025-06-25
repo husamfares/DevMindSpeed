@@ -1,6 +1,8 @@
+using API.DTO;
+
 namespace API.Interfaces;
 
 public interface IGameEngineService
 {
-    public string GenerateQuestion(int difficulty);
+    public GeneratedQuestionDto GenerateQuestion(int difficulty);
 }

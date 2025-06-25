@@ -18,6 +18,7 @@ builder.Services.AddOpenApi();
 
 builder.Services.AddCors();
 builder.Services.AddScoped<IGameEngineService, GameEngineService>();
+builder.Services.AddScoped<IAnswerValidationService, AnswerValidationService>();
 
 var app = builder.Build();
 

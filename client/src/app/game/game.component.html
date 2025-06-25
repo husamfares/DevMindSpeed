@@ -1,7 +1,8 @@
 <div class="container">
   <h2>Dev Mind Speed Game</h2>
 
-  <form *ngIf="!gameStarted" (ngSubmit)="startGame()" #gameForm="ngForm">
+  <!-- Step 1: Player name & difficulty selection form -->
+  <form *ngIf="!gameStarted && !gameSummary" (ngSubmit)="startGame()" #gameForm="ngForm" style="margin-bottom: 2em;">
     <div>
       <label for="name">Player Name:</label>
       <input
@@ -17,48 +18,26 @@
       </div>
     </div>
 
-    <div>
+    <div style="margin-top: 1em;">
       <label>Difficulty Level:</label><br />
 
       <label>
-        <input
-          type="radio"
-          name="difficulty"
-          [(ngModel)]="difficultyLevel"
-          [value]="1"
-          required
-          #difficulty="ngModel"
-        />
+        <input type="radio" name="difficulty" [(ngModel)]="difficultyLevel" [value]="1" required #difficulty="ngModel" />
         Level 1 (Easy)
       </label><br />
 
       <label>
-        <input
-          type="radio"
-          name="difficulty"
-          [(ngModel)]="difficultyLevel"
-          [value]="2"
-        />
+        <input type="radio" name="difficulty" [(ngModel)]="difficultyLevel" [value]="2" />
         Level 2 (Medium)
       </label><br />
 
       <label>
-        <input
-          type="radio"
-          name="difficulty"
-          [(ngModel)]="difficultyLevel"
-          [value]="3"
-        />
+        <input type="radio" name="difficulty" [(ngModel)]="difficultyLevel" [value]="3" />
         Level 3 (Hard)
       </label><br />
 
       <label>
-        <input
-          type="radio"
-          name="difficulty"
-          [(ngModel)]="difficultyLevel"
-          [value]="4"
-        />
+        <input type="radio" name="difficulty" [(ngModel)]="difficultyLevel" [value]="4" />
         Level 4 (Insane)
       </label>
       <div *ngIf="difficulty.invalid && difficulty.touched" style="color: red;">
@@ -66,16 +45,75 @@
       </div>
     </div>
 
-    <button type="submit" [disabled]="gameForm.invalid">Start Game</button>
+    <button type="submit" [disabled]="gameForm.invalid" style="margin-top: 1em;">Start Game</button>
   </form>
 
-  <div *ngIf="gameStarted">
-    <h3>Welcome, {{ playerName }}!</h3>
-    <p>Time the game started: {{ timeStarted }}</p>
-    <p>Difficulty Level: {{ difficultyLevel }}</p>
+  <!-- Step 2 & 3: Gameplay area -->
+  <div *ngIf="gameStarted && !gameSummary">
     <p>{{ message }}</p>
+    <p><strong>Question:</strong> {{ question }}</p>
 
-    <p>The Question is: "{{ question }}"</p>
+    <!-- Step 3: Answer submission form -->
+    <form (ngSubmit)="submitAnswer()" #answerForm="ngForm" style="margin-top: 1em;">
+      <label for="answer">Your answer:</label><br />
+      <input
+        type="number"
+        [(ngModel)]="answer"
+        id="answer"
+        name="answer"
+        required
+        step="any"
+        #answerModel="ngModel"
+        style="margin-top: 0.5em;"
+      />
+      <br />
+      <button type="submit" [disabled]="answerForm.invalid" style="margin-top: 1em;">Submit Answer</button>
+    </form>
 
+    <p style="color: red; margin-top: 1em;">
+      Warning: Only legends get this right 😎
+    </p>
+
+    <div *ngIf="SubmitAnswer">
+      <p>Your current score: {{ score | number:'1.2-2' }}</p>
+      <p>Time taken for last question: {{ timeTaken | number:'1.2-2' }} seconds</p>
+    </div>
+
+    <!-- Step 4: End Game Button -->
+    <button (click)="endGame()" style="margin-top: 2rem; background-color: #dc2626; color: white; padding: 0.5em 1em; border: none; border-radius: 4px;">
+      End Game
+    </button>
+  </div>
+
+  <!-- Step 4: Game Summary -->
+  <div *ngIf="gameSummary" class="game-summary" style="margin-top: 2rem; padding: 1rem; border: 1px solid #ddd; border-radius: 8px; background: #f3f4f6;">
+    <h3>Game Summary</h3>
+    <p><strong>Player:</strong> {{ gameSummary.name }}</p>
+    <p><strong>Difficulty Level:</strong> {{ gameSummary.difficulty }}</p>
+    <p><strong>Current Score:</strong> {{ gameSummary.current_score | percent:'1.0-2' }}</p>
+    <p><strong>Total Time Spent:</strong> {{ gameSummary.total_time_spent | number:'1.2-2' }} seconds</p>
+
+    <h4>Best Score Question</h4>
+    <p>Question: {{ gameSummary.best_score.question }}</p>
+    <p>Answer: {{ gameSummary.best_score.answer }}</p>
+    <p>Time Taken: {{ gameSummary.best_score.time_taken | number:'1.2-2' }} seconds</p>
+
+    <h4>History</h4>
+    <table style="width:100%; border-collapse: collapse; margin-top: 1rem;">
+      <thead>
+        <tr style="background: #e2e8f0;">
+          <th style="padding: 0.5rem; border: 1px solid #cbd5e1;">Question</th>
+          <th style="padding: 0.5rem; border: 1px solid #cbd5e1;">Answer</th>
+          <th style="padding: 0.5rem; border: 1px solid #cbd5e1;">Time Taken (s)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let entry of gameSummary.history">
+          <td style="padding: 0.5rem; border: 1px solid #cbd5e1;">{{ entry.question }}</td>
+          <td style="padding: 0.5rem; border: 1px solid #cbd5e1;">{{ entry.answer }}</td>
+          <td style="padding: 0.5rem; border: 1px solid #cbd5e1;">{{ entry.time_taken | number:'1.2-2' }}</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </div>

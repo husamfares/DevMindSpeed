@@ -1,36 +1,57 @@
+using API.DTO;
 using API.Interfaces;
+using System.Data;
 
-namespace API.Services;
-
-public class GameEngineService : IGameEngineService
+namespace API.Services
 {
-     public string GenerateQuestion(int difficulty)
+    public class GameEngineService : IGameEngineService
     {
-        var rand = new Random();
-        int numOperands = difficulty + 1;
-        int digitLength = difficulty;
-
-        List<int> numbers = new();
-        List<char> ops = new();
-        char[] allowedOps = ['+', '-', '*', '/'];
-
-        for (int i = 0; i < numOperands; i++)
+        public GeneratedQuestionDto GenerateQuestion(int difficulty)
         {
-            int number = rand.Next((int)Math.Pow(10, digitLength - 1), (int)Math.Pow(10, digitLength));
-            numbers.Add(number);
-            if (i < numOperands - 1)
-                ops.Add(allowedOps[rand.Next(allowedOps.Length)]);
+            var rand = new Random();
+            int numOperands = difficulty + 1;
+            int digitLength = difficulty;
+
+            List<int> numbers = new();
+            List<char> ops = new();
+            char[] allowedOps = ['+', '-', '*', '/'];
+
+            for (int i = 0; i < numOperands; i++)
+            {
+                int number = rand.Next((int)Math.Pow(10, digitLength - 1), (int)Math.Pow(10, digitLength));
+                numbers.Add(number);
+                if (i < numOperands - 1)
+                    ops.Add(allowedOps[rand.Next(allowedOps.Length)]);
+            }
+
+            string equation = "";
+            for (int i = 0; i < numbers.Count; i++)
+            {
+                equation += numbers[i];
+                if (i < ops.Count)
+                    equation += $" {ops[i]} ";
+            }
+
+            float answer;
+            try
+            {
+                // ⚠️ Evaluate the expression safely
+                var result = new DataTable().Compute(equation, null);
+                answer = Convert.ToSingle(result);
+            }
+            catch
+            {
+                // fallback in case of divide-by-zero or invalid math
+                equation = "1 + 1";
+                answer = 2;
+            }
+
+            return new GeneratedQuestionDto
+            {
+                Equation = equation,
+                Answer = answer
+            };
         }
 
-        string question = "";
-        for (int i = 0; i < numbers.Count; i++)
-        {
-            question += numbers[i];
-            if (i < ops.Count)
-                question += $" {ops[i]} ";
-        }
-
-        return question;
     }
-    
 }
