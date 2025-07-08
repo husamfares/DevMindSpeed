@@ -8,9 +8,22 @@ namespace API.Services
     {
         public GeneratedQuestionDto GenerateQuestion(int difficulty)
         {
-            var rand = new Random();
-            int numOperands = difficulty + 1;
+            int numOperands = difficulty;
             int digitLength = difficulty;
+            var rand = new Random();
+            if (difficulty == 0)
+            {
+                var num = rand.Next(1, 5);
+                numOperands = difficulty + num;
+                digitLength = difficulty + num;
+            }
+            else
+            {
+                numOperands = difficulty + 1;
+                digitLength = difficulty;
+            }
+
+            
 
             List<int> numbers = new();
             List<char> ops = new();
@@ -35,13 +48,11 @@ namespace API.Services
             float answer;
             try
             {
-                // ⚠️ Evaluate the expression safely
                 var result = new DataTable().Compute(equation, null);
                 answer = Convert.ToSingle(result);
             }
             catch
             {
-                // fallback in case of divide-by-zero or invalid math
                 equation = "1 + 1";
                 answer = 2;
             }

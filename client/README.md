@@ -1,59 +1,89 @@
-# Client
+# DevMindSpeed
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.4.
+## Project Overview
 
-## Development server
+DevMindSpeed is an interactive, fast-paced math game that tests players' mental speed and accuracy.  
+Players can enter their name, select a difficulty level, answer timed math questions, and view a detailed game summary with scores, best answers, and history.
 
-To start a local development server, run:
+The project consists of two main parts:  
+- **Backend API** built with ASP.NET Core 9.0  
+- **Frontend** built with Angular  
 
-```bash
-ng serve
-```
+---
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## Prerequisites
 
-## Code scaffolding
+Make sure you have the following installed:  
+- [.NET 9.0 SDK](https://dotnet.microsoft.com/download)  
+- [Node.js & npm](https://nodejs.org/) (required for Angular frontend)  
+- An IDE or code editor like [Visual Studio Code](https://code.visualstudio.com/)
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+---
 
-```bash
-ng generate component component-name
-```
+## Setup & Run Instructions
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+### Backend API
 
-```bash
-ng generate --help
-```
+1. Open a terminal and navigate to the backend API folder:
+    ```bash
+    cd api
+    ```
 
-## Building
+2. Restore dependencies:
+    ```bash
+    dotnet restore
+    ```
 
-To build the project run:
+3. Apply Entity Framework migrations to create/update the SQLite database:
+    ```bash
+    dotnet ef database update
+    ```
 
-```bash
-ng build
-```
+4. Run the backend API:
+    ```bash
+    dotnet run
+    ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+The API will be available at `https://localhost:<port>/` or `http://localhost:<port>/` depending on your launch settings.
 
-## Running unit tests
+---
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+### Frontend (Angular)
 
-```bash
-ng test
-```
+1. Open a terminal and navigate to the frontend folder:
+    ```bash
+    cd client
+    ```
 
-## Running end-to-end tests
+2. Install the dependencies:
+    ```bash
+    npm install
+    ```
 
-For end-to-end (e2e) testing, run:
+3. Run the Angular development server:
+    ```bash
+    ng serve
+    ```
 
-```bash
-ng e2e
-```
+The frontend will open automatically in your browser, typically at `http://localhost:4200/`.
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+---
 
-## Additional Resources
+## What We Did
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+- Developed a backend REST API with .NET 9 to handle game logic, questions, scoring, and game summary.
+- Created Angular components for:
+  - Player registration and difficulty selection
+  - Interactive gameplay with questions, timer, and answer submission
+  - Game summary with detailed stats, history, and best score display
+- Implemented a responsive and user-friendly UI with Angular Forms and validation
+- Used **Entity Framework Core** for database interactions and implemented **migrations to manage the SQLite database schema**
+- Connected frontend and backend seamlessly through HTTP client services
+
+---
+
+## Contact
+
+For questions or feedback, feel free to contact Husam.
+
+

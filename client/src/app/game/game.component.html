@@ -21,6 +21,11 @@
     <div style="margin-top: 1em;">
       <label>Difficulty Level:</label><br />
 
+            <label>
+        <input type="radio" name="difficulty" [(ngModel)]="difficultyLevel" [value]="0" />
+        Level 0 (random)
+      </label><br />
+
       <label>
         <input type="radio" name="difficulty" [(ngModel)]="difficultyLevel" [value]="1" required #difficulty="ngModel" />
         Level 1 (Easy)

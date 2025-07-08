@@ -72,7 +72,7 @@ public class SetPlayerDataController : ControllerBase
         try
         {
             var questionRecord = await _context.AnswersInfo
-            .Where(a => a.GameId == gameId && a.Answer == 0) // unanswered
+            .Where(a => a.GameId == gameId && a.Answer == 0) 
             .OrderByDescending(a => a.SubmittedAt)
             .FirstOrDefaultAsync();
 
