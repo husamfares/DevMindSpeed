@@ -14,7 +14,7 @@ namespace API.Services
             if (difficulty == 0)
             {
                 var num = rand.Next(1, 5);
-                numOperands = difficulty + num;
+                numOperands = Math.Max(2, difficulty + num);
                 digitLength = difficulty + num;
             }
             else

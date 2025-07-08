@@ -1,5 +1,8 @@
 # DevMindSpeed
+<<<<<<< HEAD
 # DevMindSpeed
+=======
+>>>>>>> 4b5ddcf1bba696887c15a84ea52f18ac123f9216
 
 ## Project Overview
 
